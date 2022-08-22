@@ -1,0 +1,14 @@
+.side-drawer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 100;
+  height: 94vh;
+  width: 70%;
+  background: #ff0055;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
+}
+
+.side-drawer a {
+  font-size: 1.5em;
+}

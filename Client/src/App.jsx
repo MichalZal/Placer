@@ -9,6 +9,8 @@ import {
 import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
 import MainNavigation from "./UI/Navigation/MainNavigation";
+import UserPlaces from './places/pages/UserPlaces'
+import NotFound from "./UI/NotFound/NotFound"
 
 const App = () => {
 	return (
@@ -19,11 +21,16 @@ const App = () => {
 					<Route exact path="/">
 						<Users />
 					</Route>
+					<Route exact path="/:userId/places">
+						<UserPlaces />
+					</Route>
 					<Route exact path="/places/new">
 						<NewPlace />
 					</Route>
-					<Route pah="/:userId/places"></Route>
-					<Redirect to="/" />
+					<Route path="not-found">
+						<NotFound />
+					</Route>
+					<Redirect to="/not-found" />
 				</Switch>
 			</main>
 		</Router>

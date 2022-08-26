@@ -3,25 +3,25 @@ import UsersList from '../components/UserList'
 
 const USERS = [
   {
-    id: 1,
+    id: 'u1',
     name: 'John',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
     placeCount: 1,
   },
   {
-    id: 2,
+    id: 'u2',
     name: 'John',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
     placeCount: 2,
   },
   {
-    id: 3,
+    id: 'u3',
     name: 'John',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
     placeCount: 3,
   },
   {
-    id: 4,
+    id: 'u4',
     name: 'John',
     image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
     placeCount: 4,

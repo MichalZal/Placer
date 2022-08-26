@@ -8,6 +8,7 @@ import {
 
 import Users from "./user/pages/Users";
 import NewPlace from "./places/pages/NewPlace";
+import UpdatePlace from './places/pages/UpdatePlace'
 import MainNavigation from "./UI/Navigation/MainNavigation";
 import UserPlaces from './places/pages/UserPlaces'
 import NotFound from "./UI/NotFound/NotFound"
@@ -26,6 +27,9 @@ const App = () => {
 					</Route>
 					<Route exact path="/places/new">
 						<NewPlace />
+					</Route>
+					<Route path="/places/:placeId">
+						<UpdatePlace />
 					</Route>
 					<Route path="not-found">
 						<NotFound />

@@ -1,0 +1,38 @@
+.auth {
+  width: 90%;
+  max-width: 30rem;
+  margin: 0 auto;
+  padding: 2rem;
+  font-size: 1.1rem;
+
+  &-caption {
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+    
+    border-bottom: 1px solid gray;
+  }
+
+  &-form {
+    margin-bottom: 3rem
+  }
+
+  &-input {
+    margin-bottom: 2rem;
+  }
+
+  &-submit {
+    width: 100%;
+  }
+
+  &-switch {
+    text-align: center;
+    margin: 0 auto ;
+  }
+
+  &-footer {
+    text-align: center;
+  }
+}

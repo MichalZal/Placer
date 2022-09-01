@@ -1,6 +1,8 @@
+const { v4: uuidv4 } = require(`uuid`);
+
 const HttpError = require("../models/http-error");
 
-const DUMMY_PLACES = [
+let DUMMY_PLACES = [
 	{
 		id: "p1",
 		title: "Pałąc nauki i kultury",
@@ -50,23 +52,71 @@ const getPlaceById = (req, res, next) => {
 };
 
 // api/places/user/:uid
-const getPlaceByUserId = (req, res, next) => {
+const getPlacesByUserId = (req, res, next) => {
 	console.log("GET request to places/user/");
 	const userId = req.params.uid;
 
-	const userPlaces = DUMMY_PLACES.find((p) => p.creator === userId);
+	const userPlaces = DUMMY_PLACES.filter((p) => p.creator === userId);
 	// console.log(userPlaces)
 
-	if (!userPlaces) {
+	if (!userPlaces || userPlaces.length === 0) {
 		// return next powoduje do przekeirwoania zapytania do kolejnej sciezki
 		// app.use czyli nasz handler errorów.
 		return next(
-			new HttpError("Could not find place for a provided user id", 404)
+			new HttpError("Could not find places for a provided user id", 404)
 		);
 	}
 
-	res.json(userPlaces);
+	res.json({userPlaces});
+};
+
+// api/places/
+const createPlace = (req, res, next) => {
+	const { title, description, coordinates, address, creator } = req.body;
+
+	const createdPlace = {
+		id: uuidv4(),
+		title,
+		description,
+		location: coordinates,
+		address,
+		creator,
+	};
+	DUMMY_PLACES.push(createdPlace);
+
+	res.status(201).json({ place: createdPlace });
+};
+
+const updatePlace = (req, res, next) => {
+	const { title, description } = req.body;
+	const placeId = req.params.pid;
+
+  // Tworzymy kopię, która jest referencją do tego elemetnu z obiektu
+	const updatedPlace = { ...DUMMY_PLACES.find((p) => p.id === placeId) };
+  
+  // bierzemy index tego elementu
+  const placeIndex = DUMMY_PLACES.findIndex((p) => p.id === placeId)
+  
+  // zmieniamy title i description na referencji
+  updatedPlace.title = title;
+  updatedPlace.description = description;
+
+  // zamieniamy element na referencje
+  DUMMY_PLACES[placeIndex] = updatedPlace;
+
+  res.status(200).json({place: updatedPlace });
+};
+
+// api/places/:pid
+const deletePlace = (req, res, next) => {
+	const placeId = req.params.pid
+  DUMMY_PLACES = DUMMY_PLACES.filter(p => p.id !== placeId)
+
+  res.status(200).json({ message: `Deleted place with id ${placeId}` })
 };
 
 exports.getPlaceById = getPlaceById;
-exports.getPlaceByUserId  = getPlaceByUserId;
+exports.getPlacesByUserId = getPlacesByUserId;
+exports.createPlace = createPlace;
+exports.updatePlace = updatePlace;
+exports.deletePlace = deletePlace;

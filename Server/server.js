@@ -17,7 +17,6 @@ app.use((req, res, next) => {
 	throw error 
 })
 
-
 app.use((error, req, res, next) => {
 	if (res.headerSent) {
 		return next(error);
@@ -26,9 +25,7 @@ app.use((error, req, res, next) => {
 	res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-
 const PORT = process.env.PORT || 5000;
-
 app.listen(PORT, () => {
 	console.log("listening on port " + PORT);
 });

@@ -8,4 +8,4 @@
 
 ### In this project I didn't use Typescript because I wanted to focus on learning this stack. But soon new project comes in. 
 
-# Project in progress. 
+# Project in progress. 🔴🔴🔴

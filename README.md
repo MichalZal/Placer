@@ -6,6 +6,6 @@
 
 ### Fullstack development is fun, but I want to focus on frontend mainly and only know core concepts of backend for future work. Nobody hires Junior fullstack developer. 
 
-### In this project I didn't use Typescript because I wanted to focus on learning this stack. But soon new project comes in. 
+### In this project I didn't use Typescript because I wanted to focus on learning this stack. But after finish I will upgrade It, because Typescript is the best.
 
 # Project in progress. 🔴🔴🔴

@@ -29,8 +29,8 @@ app.use((error, req, res, next) => {
 
 mongoose
 	.connect(
-		`mongodb+srv://${"miszka" || process.env.MONGO_USERNAME}:${
-			"Olej1234" || process.env.MONGO_PASSWORD
+		`mongodb+srv://${process.env.USERNAME}:${
+			process.env.PASSWORD
 		}@cluster0.8nmqn5d.mongodb.net/?retryWrites=true&w=majority`
 	)
 	.then(() => {

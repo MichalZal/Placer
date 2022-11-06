@@ -1,6 +1,0 @@
-get http://localhost:3030/products
-
-###
-post http://localhost:3030/products
-
-post http://localhost:

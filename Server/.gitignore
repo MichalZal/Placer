@@ -1,16 +1,18 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+getTest.http
 # dependencies
-/node_modules
 node_modules
 
 /.pnp
 .pnp.js
 /package-lock
-getTest.http
+
 
 # testing
 /coverage
+getTest.http
+package-lock.json
 
 # production
 /build

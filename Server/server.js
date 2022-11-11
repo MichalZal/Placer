@@ -36,7 +36,7 @@ mongoose
 	.connect(
 		`mongodb+srv://${process.env.MONGO_USERNAME}:${
 			process.env.MONGO_PASSWORD
-		}@cluster0.8nmqn5d.mongodb.net/?retryWrites=true&w=majority`
+		}@cluster0.8nmqn5d.mongodb.net/mern?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(PORT, () => {

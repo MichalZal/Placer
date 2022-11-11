@@ -5,8 +5,10 @@ const router = Router();
 
 const userController = require("../controllers/users-controllers");
 
+// GET > api/users/
 router.get("/", userController.getAllUsers);
 
+// POST > api/users/signup
 router.post(
 	"/signup",
 	[
@@ -16,6 +18,8 @@ router.post(
 	],
 	userController.signUp
 );
+
+// POST > /api/users/login
 router.post("/login", userController.login);
 
 module.exports = router;

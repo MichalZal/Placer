@@ -1,45 +1,10 @@
-const { v4: uuidv4 } = require(`uuid`);
 const { validationResult } = require("express-validator");
+const mongoose = require("mongoose");
 
 const HttpError = require("../models/http-error");
 const getCoordsForAddress = require("../utils/location");
 const Place = require("../models/place");
-
-let DUMMY_PLACES = [
-	{
-		id: "p1",
-		title: "Pałąc nauki i kultury",
-		description: "One of the best buildings in Poland",
-		location: {
-			lat: 40.723423,
-			lng: -42.1231,
-		},
-		address: "Poland, Warszawa",
-		creator: "u1",
-	},
-	{
-		id: "p2",
-		title: "Pałąc nauki i kultury",
-		description: "One of the best buildings in Poland",
-		location: {
-			lat: 40.723423,
-			lng: -42.1231,
-		},
-		address: "Poland, Warszawa",
-		creator: "u2",
-	},
-	{
-		id: "p3",
-		title: "Pałąc nauki i kultury",
-		description: "One of the best buildings in Poland",
-		location: {
-			lat: 40.723423,
-			lng: -42.1231,
-		},
-		address: "Poland, Warszawa",
-		creator: "u2",
-	},
-];
+const User = require("../models/user");
 
 // GET api/places/:pid
 const getPlaceById = async (req, res, next) => {
@@ -66,10 +31,10 @@ const getPlaceById = async (req, res, next) => {
 // GET api/places/user/:uid
 const getPlacesByUserId = async (req, res, next) => {
 	const userId = req.params.uid;
-	let places;
 
+	let userWithPlaces;
 	try {
-		places = await Place.find({ creator: userId });
+		userWithPlaces = await User.findById(userId).populate("place");
 		// Zwraca array.
 	} catch (err) {
 		console.log(`Error with finding place by uid: ${err}`);
@@ -78,7 +43,7 @@ const getPlacesByUserId = async (req, res, next) => {
 		);
 	}
 
-	if (!places || places.length === 0) {
+	if (!userWithPlaces || userWithPlaces.place.length === 0) {
 		// return next powoduje do przekeirwoania zapytania do kolejnej sciezki do
 		// app.use czyli nasz handler errorów.
 		return next(
@@ -87,7 +52,9 @@ const getPlacesByUserId = async (req, res, next) => {
 	}
 
 	res.json({
-		places: places.map((place) => place.toObject({ getters: true })),
+		places: userWithPlaces.place.map((place) =>
+			place.toObject({ getters: true })
+		),
 	});
 };
 
@@ -122,8 +89,28 @@ const createPlace = async (req, res, next) => {
 		creator,
 	});
 
+	let user;
 	try {
-		await createdPlace.save();
+		user = await User.findById(creator);
+	} catch (err) {
+		return next(new HttpError("Creating place failed. Please try again", 500));
+	}
+
+	if (!user) {
+		return next(
+			new HttpError("We could not find user with the provided id.", 404)
+		);
+	}
+
+	console.log(user);
+
+	try {
+		const sess = await mongoose.startSession();
+		sess.startTransaction();
+		await createdPlace.save({ session: sess });
+		user.place.push(createdPlace);
+		await user.save();
+		sess.commitTransaction();
 	} catch (err) {
 		const error = new HttpError("Creating place faild, please try again", 500);
 		return next(error);
@@ -175,9 +162,9 @@ const updatePlace = async (req, res, next) => {
 const deletePlace = async (req, res, next) => {
 	const placeId = req.params.pid;
 
-	let deletedPlace;
+	let place;
 	try {
-		deletedPlace = await Place.findById(placeId);
+		place = await Place.findById(placeId).populate("creator");
 	} catch (err) {
 		console.log(`Error occurred while finding this place: ${err}`);
 		return next(
@@ -185,8 +172,18 @@ const deletePlace = async (req, res, next) => {
 		);
 	}
 
+	if (!place) {
+		return next(new HttpError("Could not find place for this id", 404));
+	}
+
 	try {
-		await deletedPlace.remove();
+		const sess = await mongoose.startSession();
+		sess.startTransaction();
+		await place.remove({ session: sess });
+		place.creator.place.pull(place);
+		await place.creator.save({ session: sess });
+		sess.commitTransaction();
+		// te linki tworzą sesje. usuwają dane miejsce i potem jeszcze uswuają jego id w modelu User.
 	} catch (err) {
 		console.log(`Error occurred while deleting place: ${err}`);
 		return next(
@@ -194,7 +191,7 @@ const deletePlace = async (req, res, next) => {
 		);
 	}
 
-	res.status(200).json({ message: "Place deleted."});
+	res.status(200).json({ message: "Place deleted." });
 };
 
 exports.getPlaceById = getPlaceById;

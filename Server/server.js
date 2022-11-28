@@ -10,8 +10,20 @@ const HttpError = require("./models/http-error");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-
+// middleware parsujący przychodzące JSON dane na obiekty JS
 app.use(bodyParser.json());
+
+//
+app.use((req, res, next) => {
+	res.setHeader("Access-Control-Allow-Origin", "*");
+	res.setHeader(
+		"Access-Control-Allow-Headers",
+		"Origin, x-Requested-With, Content-Type, Accept, Authorization"
+	);
+	res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+
+	next();
+});
 
 app.use("/api/places", placesRoutes);
 app.use("/api/users", usersRoutes);
@@ -31,12 +43,10 @@ app.use((error, req, res, next) => {
 	res.json({ message: error.message || "An unknown error occurred!" });
 });
 
-// POłączenie z bazą. 
+// POłączenie z bazą.
 mongoose
 	.connect(
-		`mongodb+srv://${process.env.MONGO_USERNAME}:${
-			process.env.MONGO_PASSWORD
-		}@cluster0.8nmqn5d.mongodb.net/mern?retryWrites=true&w=majority`
+		`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.8nmqn5d.mongodb.net/mern?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(PORT, () => {

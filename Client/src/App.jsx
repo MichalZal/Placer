@@ -7,15 +7,17 @@ import {
 } from "react-router-dom";
 
 import { AuthContext } from "./context/auth-context";
+import LoadingSpinner from "./UI/LoadingSpinner/LoadingSpinner";
 
 const Users = React.lazy(() => import("./user/pages/Users"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
 const UpdatePlace = React.lazy(() => import("./places/pages/UpdatePlace"));
-const MainNavigation = React.lazy(() => import("./UI/Navigation/MainNavigation"));
+const MainNavigation = React.lazy(() =>
+	import("./UI/Navigation/MainNavigation")
+);
 const Auth = React.lazy(() => import("./user/pages/Auth"));
 const NotFound = React.lazy(() => import("./UI/NotFound/NotFound"));
-
 
 const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -80,7 +82,13 @@ const App = () => {
 					logout,
 				}}
 			>
-				<Suspense fallback={<div>Loading</div>}>
+				<Suspense
+					fallback={
+						<div className="center">
+							<LoadingSpinner />
+						</div>
+					}
+				>
 					<MainNavigation />
 					<main>{routes}</main>
 				</Suspense>

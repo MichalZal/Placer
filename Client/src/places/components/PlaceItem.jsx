@@ -1,16 +1,18 @@
 import React, { useState, useContext } from "react";
 
 import "./PlaceItem.scss";
+import { useHttpClient } from "../../hooks/http-hook";
 import Card from "../../UI/Card/Card";
 import Button from "../../UI/FormElements/Button";
 import Modal from "../../UI/Modal/Modal";
 import Map from "../../UI/Map/Map";
 import { AuthContext } from "../../context/auth-context";
+import { MAIN_ROUTE } from "../../constans";
+import ErrorModal from "../../UI/LoadingSpinner/ErrorModal";
+import LoadingSpinner from "../../UI/LoadingSpinner/LoadingSpinner";
 
-const PlaceItem = (
-	{ id, image, title, address, description, coordinates },
-	props
-) => {
+const PlaceItem = ({ id, image, title, address, description, coordinates, onDelete }) => {
+	const { sendRequest, isLoading, error, clearError } = useHttpClient();
 	const [showMap, setShowMap] = useState(false);
 	const [showConfirmModal, setShowConfirmModal] = useState(false);
 	const { isLoggedIn } = useContext(AuthContext);
@@ -21,13 +23,17 @@ const PlaceItem = (
 	const showDeleteWarning = () => setShowConfirmModal(true);
 	const closeDeleteWarning = () => setShowConfirmModal(false);
 
-	const confirmDeleteHandler = () => {
-		console.log("deleting place...");
+	const confirmDeleteHandler = async () => {
 		closeDeleteWarning();
+		try {
+			await sendRequest(`/${MAIN_ROUTE}/places/${id}`, "DELETE");
+		} catch (err) {}
+		onDelete(id)
 	};
 
 	return (
 		<>
+			<ErrorModal error={error} onClear={clearError}/>
 			<Modal
 				show={showMap}
 				onCancel={closeMapHandler}
@@ -63,6 +69,7 @@ const PlaceItem = (
 			</Modal>
 			<li className="place-item">
 				<Card className="place-item__content">
+					{isLoading && <LoadingSpinner asOverlay/>}
 					<div className="place-item__image">
 						<img src={image} alt={title} />
 					</div>

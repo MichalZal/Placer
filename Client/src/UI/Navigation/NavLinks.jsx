@@ -6,7 +6,7 @@ import Button from "../../UI/FormElements/Button";
 import "./NavLinks.scss";
 
 const NavLinks = () => {
-	const { isLoggedIn, logout } = useContext(AuthContext);
+	const { isLoggedIn, logout, userId } = useContext(AuthContext);
 	const history = useHistory();
 
 	const logoutHandler = () => {
@@ -23,7 +23,7 @@ const NavLinks = () => {
 			</li>
 			{isLoggedIn && (
 				<li className="nav-link">
-					<NavLink to={`/u1/places`}>My Places</NavLink>
+					<NavLink to={`/${userId}/places`}>My Places</NavLink>
 				</li>
 			)}
 			{isLoggedIn && (

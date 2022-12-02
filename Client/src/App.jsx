@@ -9,6 +9,7 @@ import {
 import { AuthContext } from "./context/auth-context";
 import LoadingSpinner from "./UI/LoadingSpinner/LoadingSpinner";
 
+// Import komponentów w sposób lazy
 const Users = React.lazy(() => import("./user/pages/Users"));
 const UserPlaces = React.lazy(() => import("./places/pages/UserPlaces"));
 const NewPlace = React.lazy(() => import("./places/pages/NewPlace"));
@@ -21,17 +22,21 @@ const NotFound = React.lazy(() => import("./UI/NotFound/NotFound"));
 
 const App = () => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
+	const [userId, setUserId] = useState(null)
 
-	const login = useCallback(() => {
+	const login = useCallback((uid) => {
 		setIsLoggedIn(true);
+		setUserId(uid)
 	}, []);
 
 	const logout = useCallback(() => {
 		setIsLoggedIn(false);
+		setUserId(null)
 	}, []);
 
 	let routes;
 
+	// Nasze scieżki zmienią się w zależności od kontekstu 
 	if (isLoggedIn) {
 		routes = (
 			<Switch>
@@ -77,9 +82,10 @@ const App = () => {
 		<Router>
 			<AuthContext.Provider
 				value={{
-					isLoggedIn: isLoggedIn,
+					isLoggedIn,
 					login,
 					logout,
+					userId,
 				}}
 			>
 				<Suspense

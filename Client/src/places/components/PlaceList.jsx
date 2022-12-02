@@ -5,7 +5,7 @@ import Card from "../../UI/Card/Card";
 import PlaceItem from "./PlaceItem";
 import Button from '../../UI/FormElements/Button'
 
-const PlaceList = ({ items }) => {
+const PlaceList = ({ items, onDeletePlace }) => {
 	if (items.length === 0) {
 		return (
 			<div className="center">
@@ -23,12 +23,13 @@ const PlaceList = ({ items }) => {
 				<PlaceItem
 					key={place.id}
 					id={place.id}
-					image={place.imageUrl}
+					image={place.image}
 					title={place.title}
 					description={place.description}
 					address={place.address}
 					createdBy={place.creator}
 					coordinates={place.location}
+					onDelete={onDeletePlace}
 				/>
 			))}
 		</ul>

@@ -8,6 +8,7 @@ import Input from "../../UI/FormElements/Input";
 import Button from "../../UI/FormElements/Button";
 import ErrorModal from "../../UI/LoadingSpinner/ErrorModal";
 import LoadingSpinner from "../../UI/LoadingSpinner/LoadingSpinner";
+import useHttpClient from "../../hooks/http-hook";
 
 import {
 	VALIDATOR_REQUIRE,
@@ -18,10 +19,9 @@ import { AuthContext } from "../../context/auth-context";
 
 const Auth = () => {
 	const { login } = useContext(AuthContext);
-
 	const [isLoginMode, setIsLoginMode] = useState(true);
-	const [isLoading, setIsLoading] = useState(false);
-	const [error, setError] = useState(false);
+
+	const { isLoading, error, sendRequest, clearError } = useHttpClient();
 	const history = useHistory();
 
 	const [formState, inputHandler, setFormData] = useForm(
@@ -65,72 +65,51 @@ const Auth = () => {
 	const authSubmissionHandler = async (e) => {
 		e.preventDefault();
 
-		setIsLoading(true);
 		if (isLoginMode) {
 			try {
-				let res = await fetch(`http://localhost:5000/api/users/login`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
+				const resData = await sendRequest(
+					`http://localhost:5000/api/users/login`,
+					"POST",
+					JSON.stringify({
 						email: formState.inputs.email.value,
 						password: formState.inputs.password.value,
 					}),
-				});
-				console.log('hey')
-				const resData = res.json();
-				if (!res.ok) {
-					throw new Error(resData.message);
-				}
+					{
+						"Content-Type": "application/json",
+					}
+				);
 
-				console.log(resData);
-				setIsLoading(false);
-				login();
+				login(resData.user.id);
 				history.replace({ pathname: "/" });
 			} catch (e) {
-				setIsLoading(false);
-				console.error(e.message)
-				setError(e.message || "Error occurred while sending data to server");
+				console.log(`Error: ${e.message}`);
 			}
 		} else {
 			try {
-				let res = await fetch(`http://localhost:5000/api/users/signup`, {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify({
+				const resData = await sendRequest(
+					`http://localhost:5000/api/users/signup`,
+					"POST",
+					JSON.stringify({
 						name: formState.inputs.name.value,
 						email: formState.inputs.email.value,
 						password: formState.inputs.password.value,
 					}),
-				});
-				const resData = res.json();
-				if (!res.ok) {
-					throw new Error(resData.message);
-				}
+					{
+						"Content-Type": "application/json",
+					}
+				);
 
-				console.log(resData);
-				setIsLoading(false);
 				login();
 				history.replace({ pathname: "/" });
 			} catch (e) {
-				setIsLoading(false);
-				console.log(e.message)
-				setError(e.message || "Error occurred while sending data to server");
+				console.log(e.message);
 			}
 		}
 	};
 
-
-	const errorHandler = () => {
-		setError(null)
-	}
-
 	return (
 		<React.Fragment>
-			<ErrorModal error={error} onClear={errorHandler}/>
+			<ErrorModal error={error} onClear={clearError} />
 			<Card className="auth card-padding">
 				{isLoading && <LoadingSpinner asOverlay />}
 				<h2 className="auth-caption"> {isLoginMode ? "Login" : "Sign up"}</h2>
@@ -164,7 +143,7 @@ const Auth = () => {
 						type="password"
 						label="Password"
 						element="input"
-						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(5)]}
+						validators={[VALIDATOR_REQUIRE(), VALIDATOR_MINLENGTH(6)]}
 						errorText="Please enter a valid password."
 						initialValue={formState.inputs.password.value}
 						initialValidate={formState.inputs.password.isValid}

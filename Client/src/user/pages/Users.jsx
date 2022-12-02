@@ -1,35 +1,42 @@
-import React from 'react'
-import UsersList from '../components/UserList'
+import React, { useEffect, useState } from "react";
 
-const USERS = [
-  {
-    id: 'u1',
-    name: 'John',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
-    placeCount: 1,
-  },
-  {
-    id: 'u2',
-    name: 'John',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
-    placeCount: 2,
-  },
-  {
-    id: 'u3',
-    name: 'John',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
-    placeCount: 3,
-  },
-  {
-    id: 'u4',
-    name: 'John',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Image_created_with_a_mobile_phone.png/1024px-Image_created_with_a_mobile_phone.png',
-    placeCount: 4,
-  },
-]
+import UsersList from "../components/UserList";
+import ErrorModal from "../../UI/LoadingSpinner/ErrorModal";
+import LoadingSpinner from "../../UI/LoadingSpinner/LoadingSpinner";
+import useHttpClient from "../../hooks/http-hook";
+import {MAIN_ROUTE} from "../../constans";
 
 const Users = () => {
-  return <UsersList items={USERS}/>
-}
+	const { isLoading, error, sendRequest, clearError } = useHttpClient()
+	const [loadedUsers, setLoadedUsers] = useState([]);
 
-export default Users
+	useEffect(() => {
+		const fetchUsers = async () => {
+			try {
+				const resData = await sendRequest(`${MAIN_ROUTE}/users`);
+
+				setLoadedUsers(resData.users);
+			} catch (e) {
+				throw new Error(e.message)
+			}
+		};
+
+		fetchUsers();
+	}, [sendRequest]);
+
+  console.log(loadedUsers)
+
+	return (
+		<React.Fragment>
+			<ErrorModal error={error} onClear={clearError} />
+			{isLoading && (
+				<div className="center">
+					<LoadingSpinner />
+				</div>
+			)}
+			{!isLoading && loadedUsers && <UsersList items={loadedUsers} />}
+		</React.Fragment>
+	);
+};
+
+export default Users;

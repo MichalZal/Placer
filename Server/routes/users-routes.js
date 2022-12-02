@@ -14,7 +14,7 @@ router.post(
 	[
 		check("name").isLength({ min: 5, max: 20 }),
 		check("email").normalizeEmail().isEmail(),
-		check("password").isLength({ min: 3 }),
+		check("password").isLength({ min: 5 }),
 	],
 	userController.signUp
 );

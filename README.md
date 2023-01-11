@@ -1,4 +1,4 @@
-<div align="center">Placer<div>
+<div align="center"><h1>Placer<h1><div>
 ## This is an application made in MERN stack. ``` MongoDB ```, ``` Express ```, ``` React ``` and ``` NodeJS ```. 
 ### In this app you have full CRUD. You can manage places for meetings. It fetches them from Mongo, and displays in React. 
 

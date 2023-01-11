@@ -1,6 +1,6 @@
 <div align="center"><h1>Placer</h1></div>
 
-<h2> This is an application made in MERN stack. ``` MongoDB ```, ``` Express ```, ``` React ``` and ``` NodeJS ```. </h2>
+<h2> This is an application made in MERN stack. <i>MongoDB</i>, <i>Express</i>, <i>React</i> and  <i>NodeJS</i>  </h2>
 <h3>In this app you have full CRUD. You can manage places for meetings. It fetches them from Mongo, and displays in React. </h3>
 
 <h3>Other packages used: </h3>

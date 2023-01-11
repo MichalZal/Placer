@@ -26,9 +26,9 @@ const PlaceItem = ({ id, image, title, address, description, coordinates, onDele
 	const confirmDeleteHandler = async () => {
 		closeDeleteWarning();
 		try {
-			await sendRequest(`/${MAIN_ROUTE}/places/${id}`, "DELETE");
+			await sendRequest(`${MAIN_ROUTE}/places/${id}`, "DELETE");
+			onDelete(id)
 		} catch (err) {}
-		onDelete(id)
 	};
 
 	return (

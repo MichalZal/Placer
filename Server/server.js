@@ -1,4 +1,3 @@
-const dotenv = require("dotenv").config();
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
@@ -46,7 +45,7 @@ app.use((error, req, res, next) => {
 // POłączenie z bazą.
 mongoose
 	.connect(
-		`mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@cluster0.8nmqn5d.mongodb.net/mern?retryWrites=true&w=majority`
+		`mongodb+srv://Miszekadmin:Olej1234@cluster0.8nmqn5d.mongodb.net/mern?retryWrites=true&w=majority`
 	)
 	.then(() => {
 		app.listen(PORT, () => {

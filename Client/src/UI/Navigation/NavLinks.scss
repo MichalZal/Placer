@@ -20,7 +20,7 @@
 	padding: 0.5rem;
 	border: 1px solid transparent;
 	position: relative;
-	transition: 100ms all ease-out;
+	transition: 150ms all ease-in-out;
 }
 
 .nav-links a:hover,
@@ -50,6 +50,11 @@
 	}
 }
 
+.nav-link_authenticate a {
+	border-radius: 12px !important;
+	// overflow: hidden;
+}
+
 @media (min-width: 768px) {
 	.nav-links {
 		flex-direction: row;
@@ -67,11 +72,13 @@
 			border: 1px solid white;
 			color: white;
 			background: transparent;
+			border-radius: 12px;
 
 			&:hover,
 			&:active {
-				background: #f8df00;
+				background-color: #f8df00;
 				color: #292929;
+				
 			}
 		}
 	}

@@ -48,7 +48,7 @@ const NewPlace = () => {
 		};
 
 		try {
-			const resData = await sendRequest(
+			 await sendRequest(
 				`${MAIN_ROUTE}/places`,
 				"POST",
 				JSON.stringify(createdPlace),

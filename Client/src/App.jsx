@@ -78,6 +78,8 @@ const App = () => {
 		);
 	}
 
+	console.log(process.env.MAIN_ROUTE)
+
 	return (
 		<Router>
 			<AuthContext.Provider

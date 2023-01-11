@@ -2,7 +2,7 @@
 ## This is an application made in MERN stack. ``` MongoDB ```, ``` Express ```, ``` React ``` and ``` NodeJS ```. 
 ### In this app you have full CRUD. You can manage places for meetings. It fetches them from Mongo, and displays in React. 
 
-### Other packages use:
+### Other packages used:
 ``` -React Router Dom ``` for managing the pages.
 ``` -react-transition-group ``` for transitions.
 ``` -Sass ``` for better css.
